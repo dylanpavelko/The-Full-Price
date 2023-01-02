@@ -1,5 +1,6 @@
 ---
 layout: "resource"
+name: "Water"
 title: "Clean Water"
 ---
 

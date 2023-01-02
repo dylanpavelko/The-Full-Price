@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+Uncovering the full price behind every day household items to help us make better purchasing decisions for both our wallets and our planet.
 
 You can find the source code for Minima at GitHub:
 [jekyll][jekyll-organization] /
