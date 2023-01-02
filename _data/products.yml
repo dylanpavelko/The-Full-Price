@@ -1,0 +1,34 @@
+paper-towel:
+  name: "Paper Towel"
+  uses: ["Napkin"]
+  materials:
+    - material: paper
+      percent: 1
+  unit-stats:
+    weight-lb: 0.07625
+    weight-source: "weighed 160 sheet roll to be 12.2oz"
+    volume-in3: 2.307
+    uses-per-unit: 1
+    annual-use-frequency: 730 #assumes two sheets used a day
+    concurrent-units-needed: 1
+cotton-napkin:
+  name: "Cotton Napkin"
+  uses: ["Napkin"]
+  compared_to: [paper-towel]
+  materials:
+    - material: cotton
+      percent: 1
+  unit-stats:
+    weight-lb: 0.75
+    weight_source: "made this up"
+    volume-in3: 18.1
+    uses-per-unit: 912.5 #assumes 5 year lifespan with 4 napkins being used interchangabley 
+    annual-use-frequency: 730 #assumes napkin is used twice a day
+    concurrent-units-needed: 4 #assumes 4 napkins being rotated 
+linen-napkin:
+  name: "Linen Napkin"
+  uses: ["Napkin"]
+  compared_to: [paper-towel]
+  materials:
+  - material: linen
+    percent: 1

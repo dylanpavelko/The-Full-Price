@@ -1,0 +1,20 @@
+gas-car:
+  fuel-type: "gasoline"
+  avg-mpg: 24.2
+  mpg-source: "https://afdc.energy.gov/data/10310"
+  avg-cargo-volume-in: 81388.8
+  cargo-source: "my mazda"
+  avg-miles-to-supermarket: 2.14
+  avg-miles-to-supermarket-source: "https://www.ers.usda.gov/amber-waves/2015/august/most-us-households-do-their-main-grocery-shopping-at-supermarkets-and-supercenters-regardless-of-income/"
+  lbs-co2-per-gallon: 19.6
+  co2-source: "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=Every%20gallon%20of%20gasoline%20burned%20creates%20about%208%2C887%20grams%20of%20CO2."
+diesel-class8-truck:
+  fuel-type: "diesel"
+  avg-mpg: 5.29
+  mpg-source: "https://afdc.energy.gov/data/10310"
+  avg-cargo-volume-in: 10112688
+  cargo-source: "https://streamlogistics.com/trailer-dimensions/"
+  avg-miles-per-shipment: 206
+  avg-miles-per-shipment-source: "https://www.census.gov/library/stories/2021/02/what-is-in-that-truck-i-just-passed-on-the-highway.html"
+  lbs-co2-per-gallon: 22.4
+  co2-source: "https://impactful.ninja/the-carbon-footprint-of-diesel-fuel/#:~:text=One%20gallon%20of%20diesel%20fuel,directly%20contributes%20to%20climate%20change."

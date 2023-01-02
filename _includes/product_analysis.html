@@ -1,0 +1,86 @@
+{% assign products = "" | split: ',' %}
+{% for p in include.products %}
+	{% assign products = products | push: site.data.products[p] %}
+{% endfor %}
+{% assign percent = 1.0 | divided_by: 3 %}
+{{ percent }}
+<div id='product' style="display: table-row;">
+	{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			<strong>{{product.name}}</strong>
+		</div>
+	{% endfor %}
+</div>
+<div>
+	Unit Price
+	<div id='product' style="display: table-row;">
+	{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			$ test
+		</div>
+	{% endfor %}
+</div>
+<div>
+	Production
+	<div id='product' style="display: table-row;">
+	{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			Materials: 
+			{% for m in product.materials %}
+				{% assign material = site.data.materials[m.material] %}<br>
+				{{ material.name }}: {{ m.percent | times: 100 }}%<br>
+				Weight: {{ m.percent | times: product.unit_weight }} <br>
+				Water Use & Impact: {{m.percent | times: material.water.gallons-per-lb | times: product.unit-stats.weight-lb }} gal <span title="{{material.water.source}}">&#9432;</span><br>
+				Energy Use:<br>
+				Land Impact:<br>
+				Air Impact: <br>
+			{% endfor %}
+		</div>
+	{% endfor %}
+</div>
+</div>
+<div>
+	Transportation 
+	<span title="Assumes best case scenario of existing trips with full vehicle where only the portion of vehicle cargo space for items is considered.">&#9432;</span>
+		{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			<li>Material Source to Manufacturing</li>
+			<li>Manufacturing to Storefront:
+				{% assign truck = site.data.transportation['diesel-class8-truck'] %}
+				{{ truck.avg-miles-per-shipment | divided_by: truck.avg-mpg | times: truck.lbs-co2-per-gallon | times: product.unit-stats.volume-in3 | divided_by: truck.avg-cargo-volume-in }} lbs of CO&#8322;
+			</li>
+			<li>Storefront to Home:
+				{% assign car = site.data.transportation['gas-car'] %}
+				{{ car.avg-miles-to-supermarket |times: 2 | divided_by: car.avg-mpg | times: car.lbs-co2-per-gallon | times: product.unit-stats.volume-in3 | divided_by: car.avg-cargo-volume-in }} lbs of CO&#8322;
+			</li>
+			<li>Home to Disposal Site</li>
+		</div>
+	{% endfor %}
+</div>
+<div>
+	Use:
+	{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			Annual Use Frequency: {{product.unit-stats.annual-use-frequency}}<br>
+			Number of Uses per Unit: {{ product.unit-stats.uses-per-unit }}<br>
+			Number of Units Needed Concurrently: {{ product.unit-stats.concurrent-units-needed  }}<br>
+			{% assign lifespan = 1.0 | times: product.unit-stats.uses-per-unit | times: product.unit-stats.concurrent-units-needed | divided_by: product.unit-stats.annual-use-frequency%}
+			Lifespan: 
+			{% if lifespan >= 1 %}
+				{{ lifespan }} years
+			{% else %}
+				{{ lifespan | times: 365 }} days
+			{% endif %}
+			<br>
+			<br>
+			Care:
+
+			
+		</div>
+	{% endfor %}
+
+
+</div>
+<div>
+	Disposal
+</div>

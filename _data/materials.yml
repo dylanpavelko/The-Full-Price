@@ -1,2 +1,18 @@
-- name: "Cotton"
+paper:
+  name: "Paper"
+  type: "paper"
+  water:
+    gallons-per-lb: 8.5
+    source: "http://www.mntap.umn.edu/industries/facility/paper/water/"
+cotton:
+  name: "Cotton"
   type: "textile"
+  water:
+    gallons-per-lb: 1320
+    source: "https://www.watercalculator.org/footprint/the-hidden-water-in-everyday-products/"
+linen:
+  name: "Linen"
+  type: "textile"
+  water: 
+    gallons-per-lb: 40
+    source: "https://www.irishlinenvictoria.com/pages/why-linen"

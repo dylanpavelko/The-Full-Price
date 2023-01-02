@@ -3,9 +3,7 @@ layout: "page"
 author: "Dylan"
 ---
 {% include page_header.html color="blue" %}
-<h1>This is a resource</h1>
-<h2>{{ page.title }} by {{ layout.author }}</h2>
-<hr>
+
 {{ content }}
 <h1>Other Resources</h1>
 {% for resource in site.resources %}
@@ -13,8 +11,3 @@ author: "Dylan"
 		<a href="{{ resource.url }}">{{ resource.title }}</a><br>
 	 {% endif %}
 {% endfor %}
-
-<h4>Material Use</h4>
-{% for material in site.data.materials %}
-	{{ material.name }}
-{% endfor%}

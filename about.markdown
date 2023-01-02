@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Uncovering the full price behind every day household items to help us make better purchasing decisions for both our wallets and our planet.
+{{site.description}}
 
 You can find the source code for Minima at GitHub:
 [jekyll][jekyll-organization] /
