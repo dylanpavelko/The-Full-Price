@@ -4,7 +4,8 @@ paper-towel:
   materials:
     - material: paper
       percent: 1
-  unit-stats:
+  unit_stats:
+    price-usd: 0.02
     weight-lb: 0.07625
     weight-source: "weighed 160 sheet roll to be 12.2oz"
     volume-in3: 2.307
@@ -18,7 +19,8 @@ cotton-napkin:
   materials:
     - material: cotton
       percent: 1
-  unit-stats:
+  unit_stats:
+    price-usd: 2.33
     weight-lb: 0.75
     weight_source: "made this up"
     volume-in3: 18.1
@@ -32,3 +34,22 @@ linen-napkin:
   materials:
   - material: linen
     percent: 1
+  unit_stats:
+    price-usd: 8
+toothpaste:
+  name: "Toothpaste"
+  uses: ["Toothpaste"]
+  unit_stats:
+    price-usd: 5.00 # $5/1 assuming 1 use is __ and total weight is __
+    uses-per-unit: 11
+toothpaste-tablets:
+  name: "Toothpaste Tablets"
+  uses: ["Toothpaste"]
+  unit_stats:
+    price-usd: 0.1278
+    uses-per-unit: 1
+    weight-lb: 0.00139
+    volume-in3: 0.0207 #assumed 3/8" diameter and 3/16" thickness
+    weight_source: "calculated from price per oz vs. units purchased"
+    annual-use-frequency: 730 #assumes you brush your teeth twice a day
+    concurrent-units-needed: 1
