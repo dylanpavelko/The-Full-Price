@@ -1,6 +1,22 @@
 {% assign products = "" | split: ',' %}
+{% assign air_stats = "" | split: ',' %}
+{% assign water_stats = "" | split: ',' %}
+
 {% for p in include.products %}
-	{% assign products = products | push: site.data.products[p] %}
+	{% assign product = site.data.products[p] %}
+	{% assign products = products | push: product %}
+
+	{% assign air_stats = air_stats | push: forloop.index %}
+
+	<!-- WATER USAGE CALCS -->
+	{% assign water_used_in_production = nil %}
+	{% for m in product.materials %}
+		{% assign material = site.data.materials[m.material] %}<br>
+		{% assign water_used_for_material = m.percent | times: material.water.gallons-per-lb | times: product.unit_stats.weight-lb %}
+		{% assign water_used_in_production = water_used_in_production | plus: water_used_for_material %}
+	{% endfor %}
+	{% assign water_stats = water_stats | push: water_used_in_production %}
+	
 {% endfor %}
 
 <div id='product' style="display: table-row;">
@@ -8,6 +24,7 @@
 		<div style="display: table-cell;padding:  2em;">
 			<h4>{{product.name}}</h4>
 			<div>
+				{% assign stats_index = forloop.index | minus: 1 %}
 				<strong>Unit Price:</strong> ${{product.unit_stats.price-usd}}
 				{% if forloop.index == 1 %}
 					{% assign base_price = product.unit_stats.price-usd %}
@@ -17,16 +34,29 @@
 				<strong>Expected Life: </strong>
 				{% assign lifespan = product.unit_stats.uses-per-unit | divided_by: annual_use%}
 				{{ lifespan }}&nbsp;days<br/>
-				<strong>Break Even:</strong><br/>
-				Cash:
-				{% assign cash_breakeven = product.unit_stats.price-usd | divided_by: base_price | divided_by: annual_use %}
-				{% if cash_breakeven < lifespan %}
-					<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-				{% endif %}
-				{{ cash_breakeven }} days
-<br/>
-				Air<br/>
-				Water<br/>
+				<strong>Days to Break Even:</strong><br/>
+
+				<strong>Cash:</strong>
+					{% assign cash_breakeven = product.unit_stats.price-usd | divided_by: base_price | divided_by: annual_use %}
+					{% if cash_breakeven < lifespan %}
+						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+					{% endif %}
+					{{ cash_breakeven }} days<br/>
+					
+				Air: {{ air_stats[stats_index] }}<br/>
+
+				<strong>Water: </strong>
+					{% if forloop.index == 1 %}
+						{% assign base_water = water_stats[stats_index] %}
+					{% endif %}
+					{% if base_water != nil %}
+						{% assign water_breakeven = water_stats[stats_index] | divided_by: base_water | divided_by: annual_use %}
+					{% endif %}
+					{% if water_breakeven < lifespan %}
+						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+					{% endif %}
+					{{ water_breakeven | round: 1 }} days
+					<br/>
 				Energy<br/>
 				Land<br/>
 
@@ -64,7 +94,7 @@
 			Materials: 
 			{% for m in product.materials %}
 				{% assign material = site.data.materials[m.material] %}<br>
-				{{ material.name }}: {{ m.percent | times: 100 }}%<br>
+				{{material.name}}: {{ m.percent | times: 100 }}%<br>
 				Weight: <span class="dimension">{{ product.unit_stats.weight-lb | times:  m.percent }}</span> lb(s)<br>
 				Water Use & Impact: {{m.percent | times: material.water.gallons-per-lb | times: product.unit_stats.weight-lb }} gal <span title="{{material.water.source}}">&#9432;</span><br>
 				Energy Use:<br>

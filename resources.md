@@ -3,6 +3,6 @@ layout: page
 title: Resources
 permalink: /resources/
 ---
-{% for material in site.resources %}
--	[{{ material.name }}]({{ material.url }})
+{% for resource in site.resources %}
+-	[{{ resource.name }}]({{ resource.url }})
 {% endfor%}

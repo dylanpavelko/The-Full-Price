@@ -21,8 +21,8 @@ cotton-napkin:
       percent: 1
   unit_stats:
     price-usd: 2.33
-    weight-lb: 0.75
-    weight_source: "made this up"
+    weight-lb: 0.13125
+    weight_source: "2.1 oz homemade cotton napkin"
     volume-in3: 18.1
     uses-per-unit: 912.5 #assumes 5 year lifespan with 4 napkins being used interchangabley 
     annual-use-frequency: 730 #assumes napkin is used twice a day
@@ -36,6 +36,11 @@ linen-napkin:
     percent: 1
   unit_stats:
     price-usd: 8
+    weight-lb: 0.1
+    weight_source: "1.6 oz homemade linen napkin"
+    uses-per-unit: 912.5 #assumes 5 year lifespan with 4 napkins being used interchangabley 
+    annual-use-frequency: 730 #assumes napkin is used twice a day
+    concurrent-units-needed: 4 #assumes 4 napkins being rotated 
 toothpaste:
   name: "Toothpaste"
   uses: ["Toothpaste"]
