@@ -1,6 +1,10 @@
 paper-towel:
   name: "Paper Towel"
-  uses: ["Napkin"]
+  uses:
+    - use: "Napkin"
+      units-needed: 1
+    - use: "Microwave Cover"
+      uses-needed: 2
   materials:
     - material: paper
       percent: 1

@@ -6,7 +6,18 @@
 	{% assign product = site.data.products[p] %}
 	{% assign products = products | push: product %}
 
-	{% assign air_stats = air_stats | push: forloop.index %}
+	<!-- AIR STATS -->
+	{% assign truck = site.data.transportation['diesel-class8-truck'] %}
+	{% assign manufacturing_to_storefront_co2 = truck.avg-miles-per-shipment | divided_by: truck.avg-mpg | times: truck.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: truck.avg-cargo-volume-in %} 
+
+
+	{% assign car = site.data.transportation['gas-car'] %}
+	{% assign storefront_to_home_co2 = car.avg-miles-to-supermarket |times: 2 | divided_by: car.avg-mpg | times: car.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: car.avg-cargo-volume-in %}
+
+	{% assign co2_total = manufacturing_to_storefront_co2 | plus: storefront_to_home_co2 %}
+	{% assign air_stats = air_stats | push: co2_total %}
+
+
 
 	<!-- WATER USAGE CALCS -->
 	{% assign water_used_in_production = nil %}
@@ -43,7 +54,19 @@
 					{% endif %}
 					{{ cash_breakeven }} days<br/>
 					
-				Air: {{ air_stats[stats_index] }}<br/>
+				<strong>Air:</strong> 
+					{% if forloop.index == 1 %}
+						{% assign base_air = air_stats[stats_index] %}
+					{% endif %}
+					{% if base_air != nil %}
+						{% assign air_breakeven = air_stats[stats_index] | divided_by: base_air | divided_by: annual_use %}
+					{% endif %}
+					{% if air_breakeven < lifespan %}
+						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+					{% endif %}
+					{{ air_breakeven | round: 1 }} days
+
+					<br/>
 
 				<strong>Water: </strong>
 					{% if forloop.index == 1 %}
@@ -85,7 +108,43 @@
 		</div>
 	{% endfor %}
 </div>
+<div>
+		<strong>Air</strong>
+		{% for product in products %}
+			<div style="display: table-cell;padding:  2em;">
+				{% assign stats_index = forloop.index | minus: 1 %}
+				<div><strong>Total:</strong>{{ air_stats[stats_index] }} lbs of CO&#8322;</div>
+				<div>Production</div>
+				<div>Transportation</div>
+				<div>Use & Care</div>
+				<div>Disposal</div>
+			</div>
+		{% endfor %}
 
+</div>
+<div>
+		<strong>Water</strong>
+		{% for product in products %}
+			<div style="display: table-cell;padding:  2em;">
+				{% assign stats_index = forloop.index | minus: 1 %}
+				<strong>Total: </strong> {{ water_stats[stats_index] }} gal<br/>
+				<strong>Production:</strong> {{ water_stats[stats_index] }} gal
+				{% for m in product.materials %}
+					{% assign material = site.data.materials[m.material] %}<br>
+					{{ m.percent | times: 100 }}% {{material.name}}: <br>
+					Weight: <span class="dimension">{{ product.unit_stats.weight-lb | times:  m.percent }}</span> lb(s)<br>
+					Water Use: {{m.percent | times: material.water.gallons-per-lb | times: product.unit_stats.weight-lb }} gal <span title="{{material.water.source}}">&#9432;</span><br>
+				{% endfor %}
+				<strong>Use & Care:</strong>
+			</div>
+		{% endfor %}
+</div>
+<div>
+		<strong>Energy</strong>
+</div>
+<div>
+		<strong>Land</strong>
+</div>
 <div>
 	<strong>Production</strong>
 	<div id='product' style="display: table-row;">
