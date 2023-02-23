@@ -3,8 +3,10 @@ paper-towel:
   uses:
     - use: "Napkin"
       units-needed: 1
+      annual-use-frequency: 730 #assumes two sheets used a day
     - use: "Microwave Cover"
-      uses-needed: 2
+      units-needed: 2
+      annual-use-frequency: 208 #assumes 4 uses a week
   materials:
     - material: paper
       percent: 1
@@ -14,11 +16,13 @@ paper-towel:
     weight-source: "weighed 160 sheet roll to be 12.2oz"
     volume-in3: 2.307
     uses-per-unit: 1
-    annual-use-frequency: 730 #assumes two sheets used a day
+    #annual-use-frequency: 730 #assumes two sheets used a day
     concurrent-units-needed: 1
 cotton-napkin:
   name: "Cotton Napkin"
-  uses: ["Napkin"]
+  uses: 
+    - use: "Napkin"
+      annual-use-frequency: 730 #assumes napkin is used twice a day
   compared_to: [paper-towel]
   materials:
     - material: cotton
@@ -29,11 +33,12 @@ cotton-napkin:
     weight_source: "2.1 oz homemade cotton napkin"
     volume-in3: 18.1
     uses-per-unit: 912.5 #assumes 5 year lifespan with 4 napkins being used interchangabley 
-    annual-use-frequency: 730 #assumes napkin is used twice a day
     concurrent-units-needed: 4 #assumes 4 napkins being rotated 
 linen-napkin:
   name: "Linen Napkin"
-  uses: ["Napkin"]
+  uses: 
+    - use: "Napkin"
+      annual-use-frequency: 730 #assumes napkin is used twice a day
   compared_to: [paper-towel]
   materials:
   - material: linen
@@ -45,6 +50,30 @@ linen-napkin:
     uses-per-unit: 912.5 #assumes 5 year lifespan with 4 napkins being used interchangabley 
     annual-use-frequency: 730 #assumes napkin is used twice a day
     concurrent-units-needed: 4 #assumes 4 napkins being rotated 
+plastic-microwave-cover:
+  name: "Plastic Microwave Cover"
+  materials:
+    - material: polypropylene
+      percent: 1
+  uses: 
+    - use: "Microwave Cover"
+      annual-use-frequency: 208 #assumes cover used 4 times a week
+  unit_stats:
+    price-usd: 14.99
+    weight-lb: 0.35
+    uses-per-unit: 2080 #assumes 4 uses a week for 10 years
+    volume-in3: 504 #3.5 " x 12 " x 12"
+  external-url: "https://www.amazon.com/Microwave-Plate-Cover-Anti-Splatter-Dishwasher/dp/B07BC6D2LH"
+glass-silicone-microwave-cover:
+  name: "Glass and Silicone Microwave Cover"
+  uses:  
+    - use: "Microwave Cover"
+      annual-use-frequency: 208 #assumes cover used 4 times a week
+  unit_stats:
+    price-usd: 29.99
+    uses-per-unit: 2080 #assumes 4 uses a week for 10 years
+    volume-in3: 302.5 #2.5 " x 11 " x 11"
+  external-url: "https://www.amazon.com/Microwave-Splatter-Cover-Collapsible-Silicone/dp/B098NTWLRP/ref=sr_1_4?keywords=glass%2Bmicrowave%2Bcover&qid=1677132489&sr=8-4&th=1"
 toothpaste:
   name: "Toothpaste"
   uses: ["Toothpaste"]

@@ -10,13 +10,17 @@
 	{% assign truck = site.data.transportation['diesel-class8-truck'] %}
 	{% assign manufacturing_to_storefront_co2 = truck.avg-miles-per-shipment | divided_by: truck.avg-mpg | times: truck.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: truck.avg-cargo-volume-in %} 
 
-
+		<!-- need co2 associated with production -->
 	{% assign car = site.data.transportation['gas-car'] %}
 	{% assign storefront_to_home_co2 = car.avg-miles-to-supermarket |times: 2 | divided_by: car.avg-mpg | times: car.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: car.avg-cargo-volume-in %}
 
 	{% assign co2_total = manufacturing_to_storefront_co2 | plus: storefront_to_home_co2 %}
 	{% assign air_stats = air_stats | push: co2_total %}
+		<!-- need co2 associated with trasnsporation to landfill -->
+		<!-- need co2 associated with use & care -->
+		<!-- need co2 associated with disposal -->
 
+		<!-- need methane calculations -->
 
 
 	<!-- WATER USAGE CALCS -->
@@ -29,7 +33,7 @@
 	{% assign water_stats = water_stats | push: water_used_in_production %}
 	
 {% endfor %}
-
+Needs to account for units needed for use <br/>
 <div id='product' style="display: table-row;">
 	{% for product in products %}
 		<div style="display: table-cell;padding:  2em;">
@@ -41,18 +45,24 @@
 					{% assign base_price = product.unit_stats.price-usd %}
 				{% endif %}
 				<br/>
-				{% assign annual_use = product.unit_stats.annual-use-frequency | divided_by: 365.0 %}
+				{% for u in product.uses %}
+					{% if u.use == page.use %}
+						{% assign annual_use = u.annual-use-frequency | divided_by: 365.0 %}
+					{% endif %}
+				{% endfor %}
 				<strong>Expected Life: </strong>
-				{% assign lifespan = product.unit_stats.uses-per-unit | divided_by: annual_use%}
-				{{ lifespan }}&nbsp;days<br/>
+				{% if annual_use > 0 %}
+					{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | | divided_by: annual_use %}
+				
+				{% endif %}
+				{{ lifespan | length_of_time: }}<br/>
 				<strong>Days to Break Even:</strong><br/>
-
 				<strong>Cash:</strong>
 					{% assign cash_breakeven = product.unit_stats.price-usd | divided_by: base_price | divided_by: annual_use %}
 					{% if cash_breakeven < lifespan %}
 						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
 					{% endif %}
-					{{ cash_breakeven }} days<br/>
+					{{ cash_breakeven | length_of_time: }}<br/>
 					
 				<strong>Air:</strong> 
 					{% if forloop.index == 1 %}
@@ -64,7 +74,7 @@
 					{% if air_breakeven < lifespan %}
 						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
 					{% endif %}
-					{{ air_breakeven | round: 1 }} days
+					{{ air_breakeven | length_of_time: }}
 
 					<br/>
 

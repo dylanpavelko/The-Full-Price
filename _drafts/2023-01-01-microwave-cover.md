@@ -4,7 +4,8 @@ date:   2023-01-07 12:31:23 -0800
 categories: comparison
 permalink: "/comparison/microwave-cover"
 layout: comparison
-products: [paper-towel]
+products: [paper-towel, plastic-microwave-cover, glass-silicone-microwave-cover]
+use: "Microwave Cover"
 ---
 One thing we love is leftovers, and more often than not those leftovers find themselves spinning around in the microwave before becoming out next meal. To help save ourselves the trouble of cleaning the entire microwave it is pretty common for us to throw a paper towel over our food so we don't end up with a volcanic eruption of tomato sauce glued to all of the walls and ceiling of our microwave. 
 

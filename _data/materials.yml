@@ -16,3 +16,11 @@ linen:
   water: 
     gallons-per-lb: 40
     source: "https://www.irishlinenvictoria.com/pages/why-linen"
+polypropylene:
+  name: "Polypropylene"
+  type: "plastic"
+  production-lbco2-per-lb: 1.548
+  co2-source: "https://www.americanchemistry.com/content/download/8063/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polypropylene-PP-Resin.pdf"  
+  water:
+    gallons-per-lb: 1.094
+    source: "https://www.americanchemistry.com/content/download/8063/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polypropylene-PP-Resin.pdf"
