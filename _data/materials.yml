@@ -1,12 +1,18 @@
 paper:
   name: "Paper"
   type: "paper"
+  production-lb-of-co2-per-lb: 0.942
+  production-co2-source: "https://bioresources.cnr.ncsu.edu/resources/life-cycle-carbon-footprint-analysis-of-pulp-and-paper-grades-in-the-united-states-using-production-line-based-data-and-integration/"
   water:
     gallons-per-lb: 8.5
     source: "http://www.mntap.umn.edu/industries/facility/paper/water/"
 cotton:
   name: "Cotton"
   type: "textile"
+  production-lb-of-co2-per-lb: 13.8 #8.42kg per 2 sq meters, cotton 300 g per sq-meter
+  production-co2-source: "https://www.co2everything.com/co2e-of/cotton"
+  production-energy-kwh-per-lb: 36.74 #60 MJ per kg -> 
+  production-energy-source: "https://blogs.nicholas.duke.edu/citizenscientist/the-fabric-for-our-lives/"
   water:
     gallons-per-lb: 1320
     source: "https://www.watercalculator.org/footprint/the-hidden-water-in-everyday-products/"
@@ -19,8 +25,8 @@ linen:
 polypropylene:
   name: "Polypropylene"
   type: "plastic"
-  production-lbco2-per-lb: 1.548
-  co2-source: "https://www.americanchemistry.com/content/download/8063/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polypropylene-PP-Resin.pdf"  
+  production-lb-of-co2-per-lb: 1.548
+  production-co2-source: "https://www.americanchemistry.com/content/download/8063/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polypropylene-PP-Resin.pdf"  
   water:
     gallons-per-lb: 1.094
     source: "https://www.americanchemistry.com/content/download/8063/file/Cradle-to-Gate-Life-Cycle-Analysis-of-Polypropylene-PP-Resin.pdf"

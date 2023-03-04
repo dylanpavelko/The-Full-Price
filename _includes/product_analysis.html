@@ -1,5 +1,7 @@
 {% assign products = "" | split: ',' %}
 {% assign air_stats = "" | split: ',' %}
+{% assign air_stats_production = "" | split: ',' %}
+{% assign air_stats_transportation = "" | split: ',' %}
 {% assign water_stats = "" | split: ',' %}
 
 {% for p in include.products %}
@@ -11,16 +13,31 @@
 	{% assign manufacturing_to_storefront_co2 = truck.avg-miles-per-shipment | divided_by: truck.avg-mpg | times: truck.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: truck.avg-cargo-volume-in %} 
 
 		<!-- need co2 associated with production -->
+
+		<!-- Transportation CO2 -->
 	{% assign car = site.data.transportation['gas-car'] %}
 	{% assign storefront_to_home_co2 = car.avg-miles-to-supermarket |times: 2 | divided_by: car.avg-mpg | times: car.lbs-co2-per-gallon | times: product.unit_stats.volume-in3 | divided_by: car.avg-cargo-volume-in %}
 
-	{% assign co2_total = manufacturing_to_storefront_co2 | plus: storefront_to_home_co2 %}
-	{% assign air_stats = air_stats | push: co2_total %}
+	{% assign co2_in_production = nil %}
+	{% for m in product.materials %}
+		{% assign material = site.data.materials[m.material] %}<br>
+		{% assign co2_for_material = m.percent | times: material.production-lb-of-co2-per-lb | times: product.unit_stats.weight-lb %}
+		{% assign co2_in_production = co2_in_production | plus: co2_for_material %}
+	{% endfor %}
+	{% assign air_stats_production = air_stats_production | push: co2_in_production %}
+
+	{% assign transportation_co2 = manufacturing_to_storefront_co2 | plus: storefront_to_home_co2 %}
+	{% assign air_stats_transportation = air_stats_transportation | push: transportation_co2 %}
+	
 		<!-- need co2 associated with trasnsporation to landfill -->
 		<!-- need co2 associated with use & care -->
 		<!-- need co2 associated with disposal -->
+	{% assign co2_total = co2_in_production | plus: transportation_co2 %}
 
-		<!-- need methane calculations -->
+	{% assign air_stats = air_stats | push: co2_total %}
+	
+
+	<!-- need methane calculations -->
 
 
 	<!-- WATER USAGE CALCS -->
@@ -119,13 +136,15 @@ Needs to account for units needed for use <br/>
 	{% endfor %}
 </div>
 <div>
+
+
 		<strong>Air</strong>
 		{% for product in products %}
 			<div style="display: table-cell;padding:  2em;">
 				{% assign stats_index = forloop.index | minus: 1 %}
-				<div><strong>Total:</strong>{{ air_stats[stats_index] }} lbs of CO&#8322;</div>
-				<div>Production</div>
-				<div>Transportation</div>
+				<div><strong>Total:</strong>&nbsp;{{ air_stats[stats_index] }}&nbsp;lbs of CO&#8322;</div>
+				<div>Production:&nbsp;{{ air_stats_production[stats_index] }}&nbsp;lbs</div>
+				<div>Transportation:&nbsp;{{ air_stats_transportation[stats_index] }}&nbsp;lbs</div>
 				<div>Use & Care</div>
 				<div>Disposal</div>
 			</div>
