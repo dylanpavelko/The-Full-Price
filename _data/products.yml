@@ -22,6 +22,7 @@ cotton-napkin:
   name: "Cotton Napkin"
   uses: 
     - use: "Napkin"
+      units-needed: 1
       annual-use-frequency: 730 #assumes napkin is used twice a day
   compared_to: [paper-towel]
   materials:
@@ -38,6 +39,7 @@ linen-napkin:
   name: "Linen Napkin"
   uses: 
     - use: "Napkin"
+      units-needed: 1
       annual-use-frequency: 730 #assumes napkin is used twice a day
   compared_to: [paper-towel]
   materials:

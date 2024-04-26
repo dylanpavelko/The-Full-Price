@@ -3,6 +3,8 @@
 {% assign air_stats_production = "" | split: ',' %}
 {% assign air_stats_transportation = "" | split: ',' %}
 {% assign water_stats = "" | split: ',' %}
+{% assign usage_stats = ""  | split: ',' %}
+{% assign annual_usage_stats = ""  | split: ',' %}
 
 {% for p in include.products %}
 	{% assign product = site.data.products[p] %}
@@ -20,7 +22,7 @@
 
 	{% assign co2_in_production = nil %}
 	{% for m in product.materials %}
-		{% assign material = site.data.materials[m.material] %}<br>
+		{% assign material = site.data.materials[m.material] %}
 		{% assign co2_for_material = m.percent | times: material.production-lb-of-co2-per-lb | times: product.unit_stats.weight-lb %}
 		{% assign co2_in_production = co2_in_production | plus: co2_for_material %}
 	{% endfor %}
@@ -36,19 +38,27 @@
 
 	{% assign air_stats = air_stats | push: co2_total %}
 	
-
 	<!-- need methane calculations -->
-
 
 	<!-- WATER USAGE CALCS -->
 	{% assign water_used_in_production = nil %}
 	{% for m in product.materials %}
-		{% assign material = site.data.materials[m.material] %}<br>
+		{% assign material = site.data.materials[m.material] %}
 		{% assign water_used_for_material = m.percent | times: material.water.gallons-per-lb | times: product.unit_stats.weight-lb %}
 		{% assign water_used_in_production = water_used_in_production | plus: water_used_for_material %}
 	{% endfor %}
 	{% assign water_stats = water_stats | push: water_used_in_production %}
 	
+
+	<!-- Usage Stats -->
+	{% for u in product.uses %}
+		{% if u.use == page.use %}
+			{% assign annual_usage_stats = annual_usage_stats | push: u.annual-use-frequency %}
+			{% assign usage_stats = usage_stats | push: u.units-needed %}
+		{% endif %}
+	{% endfor %}
+
+
 {% endfor %}
 Needs to account for units needed for use <br/>
 <div id='product' style="display: table-row;">
@@ -69,18 +79,23 @@ Needs to account for units needed for use <br/>
 				{% endfor %}
 				<strong>Expected Life: </strong>
 				{% if annual_use > 0 %}
-					{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | | divided_by: annual_use %}
+					{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | divided_by: annual_use %}
 				
 				{% endif %}
+
+
 				{{ lifespan | length_of_time: }}<br/>
 				<strong>Days to Break Even:</strong><br/>
 				<strong>Cash:</strong>
-					{% assign cash_breakeven = product.unit_stats.price-usd | divided_by: base_price | divided_by: annual_use %}
-					{% if cash_breakeven < lifespan %}
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+					{% if base_price > 0 %}
+						{% assign breakeven_uses = product.unit_stats.price-usd | times: product.unit_stats.concurrent-units-needed | divided_by: base_price %}
+						{% assign breakeven_days = breakeven_uses | divided_by: annual_use %}
+
+						{% if product.unit_stats.uses-per-unit | times: product.unit_stats.concurrent-units-needed > breakeven_uses %}
+							<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+						{% endif %}
+						{{ breakeven_days | length_of_time: }}<br/>
 					{% endif %}
-					{{ cash_breakeven | length_of_time: }}<br/>
-					
 				<strong>Air:</strong> 
 					{% if forloop.index == 1 %}
 						{% assign base_air = air_stats[stats_index] %}
@@ -107,8 +122,8 @@ Needs to account for units needed for use <br/>
 					{% endif %}
 					{{ water_breakeven | round: 1 }} days
 					<br/>
-				Energy<br/>
-				Land<br/>
+				<strong>Energy:</strong><br/>
+				<strong>Land:</strong><br/>
 
 			</div>
 		</div>
@@ -116,21 +131,22 @@ Needs to account for units needed for use <br/>
 </div>
 
 <div>
-	<span id='one_use'>Single Use</span>
-	<span id='one_year_use'>Annual Use for 1 Person</span>
-	<span id='one_year_family_use'>Annual Use for Family of 4</span>
-	<span id='one_year_population_use'>Annual Use for Population of 100,000</span>
-	<span id='ten_year_use'>10 Year Use for 1 Person</span>
-	<span id='ten_year_family_use'>10 Year Use for Family of 4</span>
-	<span id='ten_year_population_use'>10 Year Use for Population of 100,000</span>
+	<input type="range" min="1" max="7" value="1" class="slider" id="use_amount"><span id="use_amount_text">Single Use</span>
 </div>
 
 <strong>Price</strong><br/>
 <div id='product' style="display: table-row;">
 	{% for product in products %}
+		{% assign stats_index = forloop.index | minus: 1 %}
 		<div style="display: table-cell;padding:  2em;">
+			<span id="{{stats_index}}_units" min-units="{{ usage_stats[stats_index] | times: product.unit_stats.concurrent-units-needed }}">{{ usage_stats[stats_index] | times: product.unit_stats.concurrent-units-needed }}</span> units <br>
+
 			{% if product.unit_stats.uses-per-unit > 0 %}
-				$ {{ product.unit_stats.price-usd | divided_by: product.unit_stats.uses-per-unit }}<br/>
+				{% assign price = product.unit_stats.price-usd | divided_by: product.unit_stats.uses-per-unit %}
+				<span id="{{stats_index}}_price" price="{{price}}">
+					$ {{ price }}
+				</span>
+				<br/>
 			{% endif %}
 		</div>
 	{% endfor %}
@@ -212,10 +228,11 @@ Needs to account for units needed for use <br/>
 	{% endfor %}
 </div>
 <div>
-	Use:
+	Use & Care:
 	{% for product in products %}
 		<div style="display: table-cell;padding:  2em;">
-			Annual Use Frequency: {{product.unit_stats.annual-use-frequency}}<br>
+			{% assign stats_index = forloop.index | minus: 1 %}
+			Annual Use Frequency: {{annual_usage_stats[stats_index]}}<br>
 			Number of Uses per Unit: {{ product.unit_stats.uses-per-unit }}<br>
 			Number of Units Needed Concurrently: {{ product.unit_stats.concurrent-units-needed  }}<br>
 			{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | times: product.unit_stats.concurrent-units-needed | divided_by: product.unit_stats.annual-use-frequency%}
@@ -238,3 +255,70 @@ Needs to account for units needed for use <br/>
 <div>
 	Disposal
 </div>
+
+<script type="text/javascript">
+
+	var slide = document.getElementById('use_amount'),
+    sliderDiv = document.getElementById("use_amount_text");
+
+    {% for product in products %}
+    	{% assign stats_index = forloop.index | minus: 1 %}
+    	product_units{{stats_index}} = document.getElementById("{{stats_index}}_units");
+    	product_price{{stats_index}} = document.getElementById("{{stats_index}}_price");
+    {% endfor %}
+
+	slide.onchange = function() {
+		var amount_text = "Single Use"
+		var people = 1
+		var years = 1/365
+		if(this.value ==1){
+			var amount_text = "Single Use"
+			people = 1
+			years = 1/365
+		}else if(this.value ==2){
+			amount_text = "Annual Use for 1 Person"
+			people = 1
+			years = 1
+		}else if(this.value ==3){
+			amount_text = "Annual Use for Family of 4"
+			people = 4
+			years = 1
+		}else if(this.value ==4){
+			amount_text = "Annual Use for Population of 100,000"
+			people = 100000
+			years = 1
+		}else if(this.value ==5){
+			amount_text = "10 Year Use for 1 Person"
+			people = 1
+			years = 10
+		}else if(this.value ==6){
+			amount_text = "10 Year Use for Family of 4"
+			people = 4
+			years = 10
+		}else if(this.value ==7){
+			amount_text = "10 Year Use for Population of 100,000"
+			people = 100000
+			years = 10
+		}else{
+			amount_text = this.value;
+		}
+		{% for product in products %}
+    		{% assign stats_index = forloop.index | minus: 1 %}
+    		concurrent_units = {{ product.unit_stats.concurrent-units-needed  }}
+    		uses_per_unit = {{ product.unit_stats.uses-per-unit }}
+    		min_units = product_units{{stats_index}}.getAttribute('min-units')
+    		annual_use = {{annual_usage_stats[stats_index]}};
+    		units_needed = concurrent_units * Math.ceil(annual_use * people * years / uses_per_unit);
+			product_units{{stats_index}}.innerHTML = numberWithCommas(units_needed);
+
+			unit_price = {{ product.unit_stats.price-usd }}
+			product_price{{stats_index}}.innerHTML = "$"+ numberWithCommas(unit_price * units_needed);
+
+		{% endfor %}
+	    sliderDiv.innerHTML = amount_text;
+	}
+
+	function numberWithCommas(x) {
+	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+</script>
