@@ -77,12 +77,12 @@ Needs to account for units needed for use <br/>
 						{% assign annual_use = u.annual-use-frequency | divided_by: 365.0 %}
 					{% endif %}
 				{% endfor %}
+				<strong>Concurrent Units Needed:</strong> {{product.unit_stats.concurrent-units-needed}}<br>
 				<strong>Expected Life: </strong>
 				{% if annual_use > 0 %}
-					{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | divided_by: annual_use %}
+					{% assign lifespan = 1.0 | times: product.unit_stats.uses-per-unit | times: product.unit_stats.concurrent-units-needed | divided_by: annual_use %}
 				
 				{% endif %}
-
 
 				{{ lifespan | length_of_time: }}<br/>
 				<strong>Days to Break Even:</strong><br/>
