@@ -233,34 +233,25 @@ Needs to account for units needed for use <br/>
 				<strong>Expected Life: </strong>
 				
 
-				0.5&nbsp;days<br/>
-				<strong>Days to Break Even:</strong><br/>
-				<strong>Cash:</strong>
-					
+				
+					0.5&nbsp;days<br/><br>
+					<strong>Days to Break Even:</strong><br/>
+
+					<strong>Cash:</strong>
 						
+							0.5&nbsp;days<br>
 						
 
-						
-							<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-						
-						0.5&nbsp;days<br/>
-					
-				<strong>Air:</strong> 
-					
-					
-					
-					0.5&nbsp;days
+					<strong>Air:</strong> 
+							0.5&nbsp;days
+						<br/>
 
-					<br/>
-
-				<strong>Water: </strong>
-					
-					
-					
-					0.5 days
-					<br/>
-				<strong>Energy:</strong><br/>
-				<strong>Land:</strong><br/>
+					<strong>Water: </strong>
+							0.5&nbsp;days
+						<br/>
+					<strong>Energy:</strong><br/>
+					<strong>Land:</strong><br/>
+				
 
 			</div>
 		</div>
@@ -277,38 +268,25 @@ Needs to account for units needed for use <br/>
 				<strong>Expected Life: </strong>
 				
 
-				5.0&nbsp;years<br/>
-				<strong>Days to Break Even:</strong><br/>
-				<strong>Cash:</strong>
-					
+				
+					5.0&nbsp;years<br/><br>
+					<strong>Days to Break Even:</strong><br/>
+
+					<strong>Cash:</strong>
 						
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>233.0&nbsp;days<br>
 						
 
-						
-							<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-						
-						233.0&nbsp;days<br/>
-					
-				<strong>Air:</strong> 
-					
-					
-					
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					
-					12.57&nbsp;days
+					<strong>Air:</strong> 
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>50.29&nbsp;days
+						<br/>
 
-					<br/>
-
-				<strong>Water: </strong>
-					
-					
-					
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					
-					133.7 days
-					<br/>
-				<strong>Energy:</strong><br/>
-				<strong>Land:</strong><br/>
+					<strong>Water: </strong>
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>1.46&nbsp;years
+						<br/>
+					<strong>Energy:</strong><br/>
+					<strong>Land:</strong><br/>
+				
 
 			</div>
 		</div>
@@ -325,38 +303,25 @@ Needs to account for units needed for use <br/>
 				<strong>Expected Life: </strong>
 				
 
-				5.0&nbsp;years<br/>
-				<strong>Days to Break Even:</strong><br/>
-				<strong>Cash:</strong>
-					
+				
+					5.0&nbsp;years<br/><br>
+					<strong>Days to Break Even:</strong><br/>
+
+					<strong>Cash:</strong>
 						
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>2.19&nbsp;years<br>
 						
 
-						
-							<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-						
-						2.19&nbsp;years<br/>
-					
-				<strong>Air:</strong> 
-					
-					
-					
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					
-					0.0&nbsp;days
+					<strong>Air:</strong> 
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>0.0&nbsp;days
+						<br/>
 
-					<br/>
-
-				<strong>Water: </strong>
-					
-					
-					
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					
-					3.1 days
-					<br/>
-				<strong>Energy:</strong><br/>
-				<strong>Land:</strong><br/>
+					<strong>Water: </strong>
+							<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>12.34&nbsp;days
+						<br/>
+					<strong>Energy:</strong><br/>
+					<strong>Land:</strong><br/>
+				
 
 			</div>
 		</div>
@@ -662,40 +627,54 @@ Needs to account for units needed for use <br/>
     	product_price2 = document.getElementById("2_price");
     
 
-	slide.onchange = function() {
-		var amount_text = "Single Use"
-		var people = 1
-		var years = 1/365
-		if(this.value ==1){
+    slide.oninput = function() { 
+    	var amount_text = "Single Use"
+    	
+    	if(this.value ==1){
 			var amount_text = "Single Use"
-			people = 1
-			years = 1/365
 		}else if(this.value ==2){
 			amount_text = "Annual Use for 1 Person"
-			people = 1
-			years = 1
 		}else if(this.value ==3){
 			amount_text = "Annual Use for Family of 4"
-			people = 4
-			years = 1
 		}else if(this.value ==4){
 			amount_text = "Annual Use for Population of 100,000"
-			people = 100000
-			years = 1
 		}else if(this.value ==5){
 			amount_text = "10 Year Use for 1 Person"
-			people = 1
-			years = 10
 		}else if(this.value ==6){
 			amount_text = "10 Year Use for Family of 4"
-			people = 4
-			years = 10
 		}else if(this.value ==7){
 			amount_text = "10 Year Use for Population of 100,000"
-			people = 100000
-			years = 10
 		}else{
 			amount_text = this.value;
+		}
+
+		sliderDiv.innerHTML = amount_text;
+    };
+
+	slide.onchange = function() {
+		var people = 1
+		var years = 1/365
+		if(this.value ==1){ //"Single Use"
+			people = 1
+			years = 1/365
+		}else if(this.value ==2){ //"Annual Use for 1 Person"
+			people = 1
+			years = 1
+		}else if(this.value ==3){ //"Annual Use for Family of 4"
+			people = 4
+			years = 1
+		}else if(this.value ==4){ //"Annual Use for Population of 100,000"
+			people = 100000
+			years = 1
+		}else if(this.value ==5){ //"10 Year Use for 1 Person"
+			people = 1
+			years = 10
+		}else if(this.value ==6){ //"10 Year Use for Family of 4"
+			people = 4
+			years = 10
+		}else if(this.value ==7){ //"10 Year Use for Population of 100,000"
+			people = 100000
+			years = 10
 		}
 		
     		
@@ -734,7 +713,6 @@ Needs to account for units needed for use <br/>
 			product_price2.innerHTML = "$"+ numberWithCommas(unit_price * units_needed);
 
 		
-	    sliderDiv.innerHTML = amount_text;
 	}
 
 	function numberWithCommas(x) {
@@ -764,7 +742,7 @@ Needs to account for units needed for use <br/>
 </div>
 
       <div class="footer-col footer-col-3">
-        <p>Uncovering the full-price behind everyday household items to help us make better purchasing decisions for our wallets and our planet.</p>
+        <p>Uncovering the full price behind everyday household items to help us make better purchasing decisions for our wallets and our planet.</p>
       </div>
     </div>
 

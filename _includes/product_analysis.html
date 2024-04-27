@@ -70,6 +70,8 @@ Needs to account for units needed for use <br/>
 				<strong>Unit Price:</strong> ${{product.unit_stats.price-usd}}
 				{% if forloop.index == 1 %}
 					{% assign base_price = product.unit_stats.price-usd %}
+					{% assign base_air = air_stats[stats_index] %}
+					{% assign base_water = water_stats[stats_index] %}
 				{% endif %}
 				<br/>
 				{% for u in product.uses %}
@@ -84,46 +86,25 @@ Needs to account for units needed for use <br/>
 				
 				{% endif %}
 
-				{{ lifespan | length_of_time: }}<br/>
-				<strong>Days to Break Even:</strong><br/>
-				<strong>Cash:</strong>
-					{% if base_price > 0 %}
-						{% assign breakeven_uses = product.unit_stats.price-usd | times: product.unit_stats.concurrent-units-needed | divided_by: base_price %}
-						{% assign breakeven_days = breakeven_uses | divided_by: annual_use %}
+				{% if forloop.index > 0 %}
+					{{ lifespan | length_of_time: }}<br/><br>
+					<strong>Days to Break Even:</strong><br/>
 
-						{% if product.unit_stats.uses-per-unit | times: product.unit_stats.concurrent-units-needed > breakeven_uses %}
-							<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
+					<strong>Cash:</strong>
+						{% if base_price > 0 %}
+							{{"" | calculate_break_even_days: product.unit_stats.price-usd, product.unit_stats.concurrent-units-needed, base_price, annual_use, product.unit_stats.uses-per-unit}}<br>
 						{% endif %}
-						{{ breakeven_days | length_of_time: }}<br/>
-					{% endif %}
-				<strong>Air:</strong> 
-					{% if forloop.index == 1 %}
-						{% assign base_air = air_stats[stats_index] %}
-					{% endif %}
-					{% if base_air != nil %}
-						{% assign air_breakeven = air_stats[stats_index] | divided_by: base_air | divided_by: annual_use %}
-					{% endif %}
-					{% if air_breakeven < lifespan %}
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					{% endif %}
-					{{ air_breakeven | length_of_time: }}
 
-					<br/>
+					<strong>Air:</strong> 
+							{{"" | calculate_break_even_days: air_stats[stats_index], product.unit_stats.concurrent-units-needed, base_air, annual_use, product.unit_stats.uses-per-unit}}
+						<br/>
 
-				<strong>Water: </strong>
-					{% if forloop.index == 1 %}
-						{% assign base_water = water_stats[stats_index] %}
-					{% endif %}
-					{% if base_water != nil %}
-						{% assign water_breakeven = water_stats[stats_index] | divided_by: base_water | divided_by: annual_use %}
-					{% endif %}
-					{% if water_breakeven < lifespan %}
-						<img src="/assets/green-leaf-4903.svg" alt="Green Leaf" height='18'/>
-					{% endif %}
-					{{ water_breakeven | round: 1 }} days
-					<br/>
-				<strong>Energy:</strong><br/>
-				<strong>Land:</strong><br/>
+					<strong>Water: </strong>
+							{{"" | calculate_break_even_days: water_stats[stats_index], product.unit_stats.concurrent-units-needed, base_water, annual_use, product.unit_stats.uses-per-unit}}
+						<br/>
+					<strong>Energy:</strong><br/>
+					<strong>Land:</strong><br/>
+				{% endif %}
 
 			</div>
 		</div>
@@ -267,40 +248,54 @@ Needs to account for units needed for use <br/>
     	product_price{{stats_index}} = document.getElementById("{{stats_index}}_price");
     {% endfor %}
 
-	slide.onchange = function() {
-		var amount_text = "Single Use"
-		var people = 1
-		var years = 1/365
-		if(this.value ==1){
+    slide.oninput = function() { 
+    	var amount_text = "Single Use"
+    	
+    	if(this.value ==1){
 			var amount_text = "Single Use"
-			people = 1
-			years = 1/365
 		}else if(this.value ==2){
 			amount_text = "Annual Use for 1 Person"
-			people = 1
-			years = 1
 		}else if(this.value ==3){
 			amount_text = "Annual Use for Family of 4"
-			people = 4
-			years = 1
 		}else if(this.value ==4){
 			amount_text = "Annual Use for Population of 100,000"
-			people = 100000
-			years = 1
 		}else if(this.value ==5){
 			amount_text = "10 Year Use for 1 Person"
-			people = 1
-			years = 10
 		}else if(this.value ==6){
 			amount_text = "10 Year Use for Family of 4"
-			people = 4
-			years = 10
 		}else if(this.value ==7){
 			amount_text = "10 Year Use for Population of 100,000"
-			people = 100000
-			years = 10
 		}else{
 			amount_text = this.value;
+		}
+
+		sliderDiv.innerHTML = amount_text;
+    };
+
+	slide.onchange = function() {
+		var people = 1
+		var years = 1/365
+		if(this.value ==1){ //"Single Use"
+			people = 1
+			years = 1/365
+		}else if(this.value ==2){ //"Annual Use for 1 Person"
+			people = 1
+			years = 1
+		}else if(this.value ==3){ //"Annual Use for Family of 4"
+			people = 4
+			years = 1
+		}else if(this.value ==4){ //"Annual Use for Population of 100,000"
+			people = 100000
+			years = 1
+		}else if(this.value ==5){ //"10 Year Use for 1 Person"
+			people = 1
+			years = 10
+		}else if(this.value ==6){ //"10 Year Use for Family of 4"
+			people = 4
+			years = 10
+		}else if(this.value ==7){ //"10 Year Use for Population of 100,000"
+			people = 100000
+			years = 10
 		}
 		{% for product in products %}
     		{% assign stats_index = forloop.index | minus: 1 %}
@@ -315,7 +310,6 @@ Needs to account for units needed for use <br/>
 			product_price{{stats_index}}.innerHTML = "$"+ numberWithCommas(unit_price * units_needed);
 
 		{% endfor %}
-	    sliderDiv.innerHTML = amount_text;
 	}
 
 	function numberWithCommas(x) {
