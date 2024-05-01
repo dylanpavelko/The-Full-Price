@@ -6,6 +6,10 @@ paper:
   water:
     gallons-per-lb: 8.5
     source: "http://www.mntap.umn.edu/industries/facility/paper/water/"
+  land: #think about how to articulate the time per tree on a page detailing how paper land use works
+    lbs-per-acre-year: 240 #assumes 0.66 efficacy of woodpulp to paper based on source below and other references such as https://twosidesna.org/US/paper-grows-trees-quite-fast/
+    source: "https://extension.unh.edu/blog/2019/02/business-selling-timber-understanding-tree-volume-value"
+  commentary: "Call out that the combination of recycling/using recylced paper products can impact your stats by X%. Is there any commentary about the limits of recylcing paper"
 cotton:
   name: "Cotton"
   type: "textile"
@@ -16,6 +20,9 @@ cotton:
   water:
     gallons-per-lb: 1320
     source: "https://www.watercalculator.org/footprint/the-hidden-water-in-everyday-products/"
+  land:
+    lbs-per-acre-year: 1456.19 #based on 180 grow time https://www.cotton.org/pubs/cottoncounts/fieldtofabric/crops.cfm
+    source: "https://www.usda.gov/sites/default/files/documents/2022AOF-cotton-outlook.pdf"
 linen:
   name: "Linen"
   type: "textile"

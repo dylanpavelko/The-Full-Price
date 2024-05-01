@@ -5,6 +5,8 @@
 {% assign water_stats = "" | split: ',' %}
 {% assign usage_stats = ""  | split: ',' %}
 {% assign annual_usage_stats = ""  | split: ',' %}
+{% assign land_stats = ""  | split: ',' %}
+
 
 {% for p in include.products %}
 	{% assign product = site.data.products[p] %}
@@ -59,6 +61,16 @@
 	{% endfor %}
 
 
+	<!--Land Stats-->
+	{% assign land_use_production = nil %}
+	{% for m in product.materials %}
+		{% assign material = site.data.materials[m.material] %}
+		{% assign acre_year_for_material = m.percent | times: material.land.lbs-per-acre-year | times: product.unit_stats.weight-lb %}
+		{% assign land_use_production = land_use_production | plus: acre_year_for_material %}
+	{% endfor %}
+	{% assign land_stats = land_stats | push: land_use_production %}
+
+
 {% endfor %}
 Needs to account for units needed for use <br/>
 <div id='product' style="display: table-row;">
@@ -72,6 +84,8 @@ Needs to account for units needed for use <br/>
 					{% assign base_price = product.unit_stats.price-usd %}
 					{% assign base_air = air_stats[stats_index] %}
 					{% assign base_water = water_stats[stats_index] %}
+					{% assign base_land = land_stats[stats_index] %}
+
 				{% endif %}
 				<br/>
 				{% for u in product.uses %}
@@ -103,7 +117,10 @@ Needs to account for units needed for use <br/>
 							{{"" | calculate_break_even_days: water_stats[stats_index], product.unit_stats.concurrent-units-needed, base_water, annual_use, product.unit_stats.uses-per-unit}}
 						<br/>
 					<strong>Energy:</strong><br/>
-					<strong>Land:</strong><br/>
+							
+					<strong>Land:</strong>
+							{{"" | calculate_break_even_days: land_stats[stats_index], product.unit_stats.concurrent-units-needed, base_land, annual_use, product.unit_stats.uses-per-unit}}
+					    <br/>
 				{% endif %}
 
 			</div>
@@ -170,6 +187,12 @@ Needs to account for units needed for use <br/>
 </div>
 <div>
 		<strong>Land</strong>
+		{% for product in products %}
+		<div style="display: table-cell;padding:  2em;">
+			{% assign stats_index = forloop.index | minus: 1 %}
+				<strong>Acre Years: </strong> {{ land_stats[stats_index] }} years<br/>
+		</div>
+		{% endfor %}
 </div>
 <div>
 	<strong>Production</strong>
