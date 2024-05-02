@@ -15,15 +15,22 @@ module Jekyll
     end
 
     def calculate_break_even_days(input, amount, concurrent_units, base, annual_use, uses_per_unit)
-      breakeven_uses = amount * concurrent_units / base 
-      breakeven_days = breakeven_uses / annual_use
+      if(amount == nil or concurrent_units == nil or base == nil)
+        return "null value"
+      else
+        breakeven_uses = amount * concurrent_units / base 
+        breakeven_days = breakeven_uses / annual_use
 
-      leaf_image = ""
-      if(uses_per_unit * concurrent_units > breakeven_uses)
-        leaf_image = "<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>"
+        leaf_image = ""
+        if(uses_per_unit * concurrent_units > breakeven_uses)
+          leaf_image = "<img src='/assets/green-leaf-4903.svg' alt='Green Leaf' height='18'/>"
+        end
+
+        return leaf_image + length_of_time(breakeven_days)
+      
       end
 
-      return leaf_image + length_of_time(breakeven_days)
+
     end
   end
 end
